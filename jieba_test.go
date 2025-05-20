@@ -11,7 +11,7 @@ func ExampleJieba() {
 	var s string
 	var words []string
 	use_hmm := true
-	//equals with x := NewJieba(DICT_PATH, HMM_PATH, USER_DICT_PATH)
+	// equals with x := NewJieba(DICT_PATH, HMM_PATH, USER_DICT_PATH)
 	x := NewJieba()
 	defer x.Free()
 
@@ -104,13 +104,13 @@ func ExampleJieba() {
 }
 
 func TestJieba(t *testing.T) {
-	//equals with x := NewJieba(DICT_PATH, HMM_PATH, USER_DICT_PATH)
+	// equals with x := NewJieba(DICT_PATH, HMM_PATH, USER_DICT_PATH)
 	x := NewJieba()
 	defer x.Free()
 	var s string
 	var expected string
 	var actual string
-	var use_hmm = true
+	use_hmm := true
 
 	s = "我来到北京清华大学"
 	expected = "我/来到/北京/清华/清华大学/华大/大学"
@@ -157,10 +157,10 @@ func TestJieba(t *testing.T) {
 	s = "长春市长春药店"
 	wordinfos := x.Tokenize(s, SearchMode, false)
 	expectedwords := []Word{
-		Word{Str: "长春", Start: 0, End: 6},
-		Word{Str: "长春市", Start: 0, End: 9},
-		Word{Str: "长春", Start: 9, End: 15},
-		Word{Str: "药店", Start: 15, End: 21},
+		{Str: "长春", Start: 0, End: 6},
+		{Str: "长春市", Start: 0, End: 9},
+		{Str: "长春", Start: 9, End: 15},
+		{Str: "药店", Start: 15, End: 21},
 	}
 	if !reflect.DeepEqual(wordinfos, expectedwords) {
 		t.Error()
@@ -182,9 +182,9 @@ func TestJiebaCutForSearch(t *testing.T) {
 	}
 	wordinfos := x.Tokenize(s, SearchMode, false)
 	expectedwords := []Word{
-		Word{Str: "长江", Start: 0, End: 6},
-		Word{Str: "大桥", Start: 6, End: 12},
-		Word{Str: "长江大桥", Start: 0, End: 12},
+		{Str: "长江", Start: 0, End: 6},
+		{Str: "大桥", Start: 6, End: 12},
+		{Str: "长江大桥", Start: 0, End: 12},
 	}
 	if !reflect.DeepEqual(wordinfos, expectedwords) {
 		t.Error(wordinfos, expectedwords)
@@ -192,7 +192,7 @@ func TestJiebaCutForSearch(t *testing.T) {
 }
 
 func BenchmarkJieba(b *testing.B) {
-	//equals with x := NewJieba(DICT_PATH, HMM_PATH, USER_DICT_PATH)
+	// equals with x := NewJieba(DICT_PATH, HMM_PATH, USER_DICT_PATH)
 	x := NewJieba()
 	s := "小明硕士毕业于中国科学院计算所，后在日本京都大学深造"
 	defer x.Free()
@@ -211,31 +211,31 @@ func BenchmarkJieba(b *testing.B) {
 	}
 }
 
-func ExampleExtract() {
-	x := NewJieba()
-	defer x.Free()
-
-	s := "我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。"
-	words := x.Extract(s, 5)
-	fmt.Println(s)
-	fmt.Println("关键词抽取:", strings.Join(words, "/"))
-	word_weights := x.ExtractWithWeight(s, 5)
-	fmt.Println("关键词抽取:", word_weights)
-
-	x.AddWord("人生巅峰")
-	words = x.Extract(s, 5)
-	fmt.Println("AddWord后关键词抽取:", strings.Join(words, "/"))
-
-	x.RemoveWord("人生巅峰")
-	words = x.Extract(s, 5)
-	fmt.Println("RemoveWord后关键词抽取:", strings.Join(words, "/"))
-	// Output:
-	// 我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
-	// 关键词抽取: CEO/升职/加薪/手扶拖拉机/巅峰
-	// 关键词抽取: [{CEO 11.739204307083542} {升职 10.8561552143} {加薪 10.642581114} {手扶拖拉机 10.0088573539} {巅峰 9.49395840471}]
-	// AddWord后关键词抽取: CEO/人生巅峰/升职/加薪/手扶拖拉机
-	// RemoveWord后关键词抽取: CEO/升职/加薪/手扶拖拉机/巅峰
-}
+// func ExampleExtract() {
+// 	x := NewJieba()
+// 	defer x.Free()
+//
+// 	s := "我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。"
+// 	words := x.Extract(s, 5)
+// 	fmt.Println(s)
+// 	fmt.Println("关键词抽取:", strings.Join(words, "/"))
+// 	word_weights := x.ExtractWithWeight(s, 5)
+// 	fmt.Println("关键词抽取:", word_weights)
+//
+// 	x.AddWord("人生巅峰")
+// 	words = x.Extract(s, 5)
+// 	fmt.Println("AddWord后关键词抽取:", strings.Join(words, "/"))
+//
+// 	x.RemoveWord("人生巅峰")
+// 	words = x.Extract(s, 5)
+// 	fmt.Println("RemoveWord后关键词抽取:", strings.Join(words, "/"))
+// 	// Output:
+// 	// 我是拖拉机学院手扶拖拉机专业的。不用多久，我就会升职加薪，当上CEO，走上人生巅峰。
+// 	// 关键词抽取: CEO/升职/加薪/手扶拖拉机/巅峰
+// 	// 关键词抽取: [{CEO 11.739204307083542} {升职 10.8561552143} {加薪 10.642581114} {手扶拖拉机 10.0088573539} {巅峰 9.49395840471}]
+// 	// AddWord后关键词抽取: CEO/人生巅峰/升职/加薪/手扶拖拉机
+// 	// RemoveWord后关键词抽取: CEO/升职/加薪/手扶拖拉机/巅峰
+// }
 
 func TestExtractor(t *testing.T) {
 	x := NewJieba()

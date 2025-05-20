@@ -3,6 +3,8 @@ package gojieba
 import (
 	"path"
 	"runtime"
+
+	_ "embed"
 )
 
 var (
@@ -12,6 +14,19 @@ var (
 	USER_DICT_PATH  string
 	IDF_PATH        string
 	STOP_WORDS_PATH string
+)
+
+var (
+	//go:embed dict/jieba.dict.utf8
+	DICT_DATA string
+	//go:embed dict/hmm_model.utf8
+	HMM_DATA string
+	//go:embed dict/user.dict.utf8
+	USER_DICT_DATA string
+	//go:embed dict/idf.utf8
+	IDF_DATA string
+	//go:embed dict/stop_words.utf8
+	STOP_WORDS_DATA string
 )
 
 func init() {
@@ -25,17 +40,15 @@ func init() {
 
 const TOTAL_DICT_PATH_NUMBER = 5
 
-func getDictPaths(args ...string) [TOTAL_DICT_PATH_NUMBER]string {
+func getDictString() [TOTAL_DICT_PATH_NUMBER]string {
 	dicts := [TOTAL_DICT_PATH_NUMBER]string{
-		DICT_PATH,
-		HMM_PATH,
-		USER_DICT_PATH,
-		IDF_PATH,
-		STOP_WORDS_PATH,
+		DICT_DATA,
+		HMM_DATA,
+		USER_DICT_DATA,
+		IDF_DATA,
+		STOP_WORDS_DATA,
 	}
-	for i := 0; i < len(args) && i < len(dicts); i++ {
-		dicts[i] = args[i]
-	}
+
 	return dicts
 }
 

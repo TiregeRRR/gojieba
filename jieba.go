@@ -6,6 +6,7 @@ package gojieba
 #include "jieba.h"
 */
 import "C"
+
 import (
 	"runtime"
 	"unsafe"
@@ -28,21 +29,34 @@ type Jieba struct {
 	jieba C.Jieba
 }
 
-func NewJieba(paths ...string) *Jieba {
-	dictpaths := getDictPaths(paths...)
-	dpath, hpath, upath, ipath, spath := C.CString(dictpaths[0]), C.CString(dictpaths[1]), C.CString(dictpaths[2]), C.CString(dictpaths[3]), C.CString(dictpaths[4])
-	defer C.free(unsafe.Pointer(dpath))
-	defer C.free(unsafe.Pointer(hpath))
-	defer C.free(unsafe.Pointer(upath))
-	defer C.free(unsafe.Pointer(ipath))
-	defer C.free(unsafe.Pointer(spath))
+func NewJieba() *Jieba {
+	dictStrings := getDictString()
+
+	dictContent := dictStrings[0]
+	hmmContent := dictStrings[1]
+	userDictContent := dictStrings[2]
+	idfContent := dictStrings[3]
+	stopWordsContent := dictStrings[4]
+
+	cDictContent := C.CString(dictContent)
+	cHmmContent := C.CString(hmmContent)
+	cUserDictContent := C.CString(userDictContent)
+	cIdfContent := C.CString(idfContent)
+	cStopWordsContent := C.CString(stopWordsContent)
+
+	defer C.free(unsafe.Pointer(cDictContent))
+	defer C.free(unsafe.Pointer(cHmmContent))
+	defer C.free(unsafe.Pointer(cUserDictContent))
+	defer C.free(unsafe.Pointer(cIdfContent))
+	defer C.free(unsafe.Pointer(cStopWordsContent))
+
 	jieba := &Jieba{
 		C.NewJieba(
-			dpath,
-			hpath,
-			upath,
-			ipath,
-			spath,
+			cDictContent,
+			cHmmContent,
+			cUserDictContent,
+			cIdfContent,
+			cStopWordsContent,
 		),
 	}
 	runtime.SetFinalizer(jieba, (*Jieba).Free)
