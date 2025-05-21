@@ -13,9 +13,7 @@ public:
       : dict_trie_(dict_string, user_dict_string), model_(model_string),
         mp_seg_(&dict_trie_), hmm_seg_(&model_), mix_seg_(&dict_trie_, &model_),
         full_seg_(&dict_trie_), query_seg_(&dict_trie_, &model_),
-        extractor(&dict_trie_, &model_, idf_string, stop_word_string) {
-    cout << "Jieba constructor called" << endl;
-  }
+        extractor(&dict_trie_, &model_, idf_string, stop_word_string) {}
   ~Jieba() {}
 
   struct LocWord {
